@@ -3,8 +3,17 @@ import { Register, Home, Activation,Login } from "./app/page";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Store from "./redux/store";
+import {useEffect} from "react";
+import { useSelector } from "react-redux";
+import { loadUser } from "./redux/action/user";
 
 function App() {
+  const { loading } = useSelector((state) => state.user);
+  console.log(loading);
+  useEffect(() => {
+    Store.dispatch(loadUser());
+  }, []);
   return (
     <div className="App">
       <Router>

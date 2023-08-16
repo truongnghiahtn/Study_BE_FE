@@ -10,7 +10,7 @@ const userController = require('../app/controller/userController');
 router.post("/register",upload.single("file"), userController.register);
 router.post("/active",catchAsyncErrors(userController.activation));
 router.post("/login",catchAsyncErrors(userController.login));
-router.post("/getUser",isAuthenticated,catchAsyncErrors(userController.getUser));
+router.get("/getUser",isAuthenticated,catchAsyncErrors(userController.getUser));
 
 
 module.exports= router;
