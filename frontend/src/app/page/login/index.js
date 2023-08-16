@@ -5,7 +5,7 @@ import {
 } from "@ant-design/icons";
 import classNames from "classnames/bind";
 import styles from "./login.module.scss";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import { service  } from "../../../util/server";
@@ -14,6 +14,7 @@ import { service  } from "../../../util/server";
 const cx = classNames.bind(styles);
 
 export default function Login() {
+  const navigate = useNavigate();
   const [eye, setEye] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -26,21 +27,16 @@ export default function Login() {
         password
     }
     axios
-      .post(`${service}user/login`, user)
+      .post(`${service}user/login`, user,{ withCredentials: true })
       .then((res) => {
-        toast.success(res.data.message);
-        resetUser();
+        toast.success("Đăng nhập nhành công");
+        navigate("/");
+        //window.location.reload();
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error("Lỗi khi đăng nhập");
       });
   };
-
-  const resetUser=()=>{
-    setUserName("");
-    setPassword("");
-  }
-
   return (
     <div className={cx("wrapper", "img-cover")}>
       <form className={cx("form")} onSubmit={handleSubmit}>

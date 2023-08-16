@@ -58,38 +58,75 @@ class UserController {
     }
   }
 
-
   // active user
-   async activation(req,res,next){
+  async activation(req, res, next) {
     try {
-      const {token}= req.body;
-      const newUser= jwt.verify(
-        token,
-        process.env.ACTIVATION_SECRET
-      );
-      if(!newUser){
-        return next(new ErrorHandler("Invalid token",400));
+      const { token } = req.body;
+      const newUser = jwt.verify(token, process.env.ACTIVATION_SECRET);
+      if (!newUser) {
+        return next(new ErrorHandler("Invalid token", 400));
       }
-      const {name, email, password, avatar}=newUser;
-      let user= await User.findOne({email});
-      if(user){
-        return next(new ErrorHandler("User already exitsts",400));
+      const { name, email, password, avatar } = newUser;
+      let user = await User.findOne({ email });
+      if (user) {
+        return next(new ErrorHandler("User already exitsts", 400));
       }
       user = await User.create({
         name,
         email,
         password,
-        avatar:{
-          url:avatar
-        }
+        avatar: {
+          url: avatar,
+        },
       });
-      sendToken(user,201,res);
-    }
-    catch(error){
-      return next(new ErrorHandler(error.message,400))
+      sendToken(user, 201, res);
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 400));
     }
   }
 
+  // login account
+
+  async login(req, res, next) {
+    try {
+      const { userName, password } = req.body;
+      if (!userName || !password) {
+        return next(new ErrorHandler("Please provide the all fields!", 400));
+      }
+      let user = await User.findOne({ name: userName }).select("+password");
+      if (!user) {
+        user = await User.findOne({ email: userName }).select("+password");
+      }
+      if (!user) {
+        return next(new ErrorHandler("tài khoản không tồn tại", 400));
+      }
+      const isPassword = await user.comparePassword(password);
+      if (!isPassword) {
+        return next(new ErrorHandler("mật khẩu không đúng", 400));
+      }
+      sendToken(user, 201, res);
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+
+  // load user
+  async getUser(req, res, next) {
+    try {
+      const user = await User.findById(req.user.id);
+
+      if (!user) {
+        return next(new ErrorHandler("User doesn't exists", 400));
+      }
+
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
 }
 // create activation token
 const createActivationToken = (user) => {
