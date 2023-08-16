@@ -1,33 +1,50 @@
+// import thu vien
+const express = require("express");
 const path = require("path");
-const express = require('express');
-const app = express();
 const morgan = require("morgan");
 const methodOverride = require("method-override");
-
+const ErrorHandler = require("./app/middleware/error");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const route = require("./routes");
+
+const app = express();
+const PORT = 8000;
 
 
 
 // config file static
-
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(
-    express.urlencoded({
-      extended: true,
-    })
-  );
-  app.use(express.json());
-  
-  // custom method
-  app.use(methodOverride("_method"));
-  
-  // HTTP logger
-  app.use(morgan("combined"));
+// config dotenv
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  require("dotenv").config({
+    path: "./config/.env",
+  });
+}
 
-  var port =8000;
+
+// parser DATA
+app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+app.use(express.json());
+
+// set cookie
+app.use(cookieParser());
+
+// custom method
+app.use(methodOverride("_method"));
+
+// HTTP logger
+app.use(morgan("combined"));
+
+// contoller
 route(app);
 
-app.listen(port, () =>
-  console.log(`App listening at http://localhost:${port}`)
-);
+// use middleware err
+app.use(ErrorHandler);
+
+app.listen(PORT, () => {
+  console.log(process.env.NODE_ENV);
+  console.log(process.env.PORT);
+  console.log(`App listening at http://localhost:${PORT}`);
+});

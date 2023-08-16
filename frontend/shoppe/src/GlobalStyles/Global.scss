@@ -7,6 +7,10 @@
     --default-layout-width: 1150px;
     --black: #000;
     --text-color: #333;
+    --color-input-focus:#80bdff;
+    --green-success:#04aa6d;
+    --green-success-hover:#03744b;
+    --time-animate-hover:0.3s;
 }
 
 * {
@@ -17,9 +21,6 @@
 
 html {
     font-size: 62.5%;
-}
-p{
-    color: red;
 }
 
 body {
