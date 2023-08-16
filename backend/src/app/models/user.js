@@ -3,10 +3,6 @@ const bcrypt = require("bcryptjs"); //  hash code password
 const jwt = require("jsonwebtoken"); // token of user
 
 
-//
-const JWT_SECRET_KEY = "abc";
-const JWT_EXPIRES = "7d"
-
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -78,8 +74,8 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
 
 // jwt token
 userSchema.methods.getJwtToken = function () {
-  return jwt.sign({ id: this._id }, JWT_SECRET_KEY, {
-    expiresIn: JWT_EXPIRES,
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRES,
   });
 };
 

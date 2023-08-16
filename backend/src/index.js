@@ -21,7 +21,7 @@ db.connect();
 
 //
 app.use(cors({
-  origin: ['https://eshop-tutorial-pyri.vercel.app',],
+  origin: ['http://localhost:3000',],
   credentials: true
 }));
 
@@ -39,7 +39,7 @@ app.use("/", express.static("uploads"));
 // config dotenv
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({
-    path: "./config/.env",
+    path: "./src/config/.env",
   });
 }
 
@@ -63,8 +63,6 @@ route(app);
 // use middleware err
 app.use(ErrorHandler);
 
-app.listen(PORT, () => {
-  // console.log(process.env.NODE_ENV);
-  // console.log(process.env.PORT);
-  console.log(`App listening at http://localhost:${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`App listening at http://localhost:${process.env.PORT}`);
 });

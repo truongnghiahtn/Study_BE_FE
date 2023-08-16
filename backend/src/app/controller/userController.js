@@ -62,7 +62,7 @@ class UserController {
 }
 // create activation token
 const createActivationToken = (user) => {
-  return jwt.sign(user, ACTIVATION_SECRET, {
+  return jwt.sign(user, process.env.ACTIVATION_SECRET, {
     expiresIn: "5m",
   });
 };

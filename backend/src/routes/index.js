@@ -3,7 +3,7 @@ const userRouter = require("./user");
 
 function route(app) {
   app.use("/test", testRouter);
-  app.use("/user", userRouter);
+  app.use("/api/user", userRouter);
 
 }
 

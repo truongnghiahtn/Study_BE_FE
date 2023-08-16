@@ -7,13 +7,18 @@ import {
 import classNames from "classnames/bind";
 import styles from "./signUp.module.scss";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import {toast} from 'react-toastify';
+import { service  } from "../../../util/server";
+
 
 const cx = classNames.bind(styles);
 
-export default function SignUp() {
+export default function Register() {
   const [eye, setEye] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState(null);
 
   const handleFileInputChange = (e) => {
@@ -21,9 +26,33 @@ export default function SignUp() {
     setAvatar(file);
   };
 
-  const handleSubmit =(e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(userName);
+    const config = { headers: { "Content-Type": "multipart/form-data" } };
+
+    const newForm = new FormData();
+
+    newForm.append("file", avatar);
+    newForm.append("name", userName);
+    newForm.append("email", email);
+    newForm.append("password", password);
+
+    axios
+      .post(`${service}user/register`, newForm, config)
+      .then((res) => {
+        toast.success(res.data.message);
+        resetUser();
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  };
+
+  const resetUser=()=>{
+    setUserName("");
+    setEmail("");
+    setPassword("");
+    setAvatar(null);
   }
 
   return (
@@ -31,7 +60,7 @@ export default function SignUp() {
       <form className={cx("form")} onSubmit={handleSubmit}>
         <h2 style={{ margin: "20px 0" }}>Register</h2>
         <div className={cx("input")}>
-          <label htmlFor="userName">Email</label>
+          <label htmlFor="userName">Username</label>
           <input
             id="userName"
             className={cx("input-content")}
@@ -39,6 +68,17 @@ export default function SignUp() {
             type="text"
             style={{ height: "40px" }}
             onChange={(e)=>setUserName(e.target.value)}
+          />
+        </div>
+        <div className={cx("input")}>
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            className={cx("input-content")}
+            name="email"
+            type="text"
+            style={{ height: "40px" }}
+            onChange={(e)=>setEmail(e.target.value)}
           />
         </div>
         <div className={cx("input")}>

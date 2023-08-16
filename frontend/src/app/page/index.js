@@ -1,4 +1,4 @@
-import LogIn from "./signUp";
+import Register from "./register";
 import Home from "./home";
 
-export {LogIn,Home};
+export {Register,Home};
