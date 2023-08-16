@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken"); // token of user
 
 
 //
-const JWT_SECRET_KEY = "2FxXT1NTf2K1Mo4i6AOvtdI";
+const JWT_SECRET_KEY = "abc";
 const JWT_EXPIRES = "7d"
 
 const { Schema } = mongoose;
@@ -82,3 +82,5 @@ userSchema.methods.getJwtToken = function () {
     expiresIn: JWT_EXPIRES,
   });
 };
+
+module.exports = mongoose.model("User", userSchema);
