@@ -7,12 +7,14 @@ const ErrorHandler = require("./app/middleware/error");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const route = require("./routes");
+const db= require("./db/database");
 
 const app = express();
 const PORT = 8000;
 
 
-
+// connect db
+db.connect();
 // config file static
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -44,7 +46,7 @@ route(app);
 app.use(ErrorHandler);
 
 app.listen(PORT, () => {
-  console.log(process.env.NODE_ENV);
-  console.log(process.env.PORT);
+  // console.log(process.env.NODE_ENV);
+  // console.log(process.env.PORT);
   console.log(`App listening at http://localhost:${PORT}`);
 });
