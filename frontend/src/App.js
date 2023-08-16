@@ -1,5 +1,5 @@
 import "./App.css";
-import { Register, Home } from "./app/page";
+import { Register, Home, Activation,Login } from "./app/page";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,6 +11,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/activation/:token" element={<Activation />} />
         </Routes>
         <ToastContainer
             position="bottom-center"

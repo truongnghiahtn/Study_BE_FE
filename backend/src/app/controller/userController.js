@@ -5,10 +5,8 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../../util/sendMail");
-// const sendToken = require("../utils/jwtToken");
+const sendToken = require("../../util/jwtToken");
 // const { isAuthenticated } = require("../middleware/auth");
-
-const ACTIVATION_SECRET = "abc"
 
 class UserController {
   async register(req, res, next) {
@@ -59,6 +57,39 @@ class UserController {
       return next(new ErrorHandler(error.message, 400));
     }
   }
+
+
+  // active user
+   async activation(req,res,next){
+    try {
+      const {token}= req.body;
+      const newUser= jwt.verify(
+        token,
+        process.env.ACTIVATION_SECRET
+      );
+      if(!newUser){
+        return next(new ErrorHandler("Invalid token",400));
+      }
+      const {name, email, password, avatar}=newUser;
+      let user= await User.findOne({email});
+      if(user){
+        return next(new ErrorHandler("User already exitsts",400));
+      }
+      user = await User.create({
+        name,
+        email,
+        password,
+        avatar:{
+          url:avatar
+        }
+      });
+      sendToken(user,201,res);
+    }
+    catch(error){
+      return next(new ErrorHandler(error.message,400))
+    }
+  }
+
 }
 // create activation token
 const createActivationToken = (user) => {

@@ -43,7 +43,6 @@ const userSchema = new Schema({
   avatar: {
     puplic_id: {
       type: String,
-      required: true,
     },
     url: {
       type: String,
