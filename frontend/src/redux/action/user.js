@@ -2,6 +2,7 @@ import axios from "axios";
 import { service } from "../../util/server";
 
 // load user
+// withCredentials dùng để đọc được cookie
 export const loadUser = () => async(dispatch) => {
     try {
         dispatch({

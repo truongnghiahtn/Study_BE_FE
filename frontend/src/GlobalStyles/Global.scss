@@ -1,4 +1,4 @@
-@import 'normalize.css';
+//@import 'normalize.css';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
 :root {
@@ -20,26 +20,20 @@
     margin: 0;
 }
 
-html {
-    font-size: 62.5%;
-}
-
-body {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.6rem;
-    line-height: 1.5;
-    text-rendering: optimizespeed;
-    color: var(--text-color);
-}
-
-button,
+// body {
+//     font-family: 'Roboto', sans-serif;
+//     // font-size: 1.6rem;
+//     // line-height: 1.5;
+//     text-rendering: optimizespeed;
+//     // color: var(--text-color);
+// }
 input,
 [tabindex] {
     outline: none;
-    border: none;
 }
 
+
 a[href] {
-    color: var(--text-color);
+    // color: var(--text-color);
     text-decoration: none;
 }
