@@ -11,6 +11,7 @@ router.post("/register",upload.single("file"), userController.register);
 router.post("/active",catchAsyncErrors(userController.activation));
 router.post("/login",catchAsyncErrors(userController.login));
 router.get("/getUser",isAuthenticated,catchAsyncErrors(userController.getUser));
+router.get("/logout",isAuthenticated,catchAsyncErrors(userController.logout))
 
 
 module.exports= router;

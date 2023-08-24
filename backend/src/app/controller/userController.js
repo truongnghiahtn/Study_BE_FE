@@ -127,6 +127,23 @@ class UserController {
       return next(new ErrorHandler(error.message, 500));
     }
   }
+
+  // logout
+  async logout(req, res, next) {
+    try {
+      res.cookie("token","null",{
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      })
+
+      res.status(201).json({
+        success:true,
+        message:"Bạn đã log out thành công"
+      })
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
 }
 // create activation token
 const createActivationToken = (user) => {

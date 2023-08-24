@@ -25,7 +25,7 @@ export default function Activation() {
       })
     }
     setFlag(true);
-  }, [flag]);
+  }, [flag,routeParams]);
 
   return <div className={cx("warapper")} >
     {active?(
