@@ -1,16 +1,17 @@
 const path = require("path");
-const User = require("../models/user");
+const Shop = require("../models/shop");
 const ErrorHandler = require("../../util/ErrorHandler");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../../util/sendMail");
-const sendToken = require("../../util/jwtToken");
+const sendShopToken = require("../../util/shopToken");
 
-class UserController {
+class ShopController {
+  // register seller
   async register(req, res, next) {
     try {
-      const { name, email, password } = req.body;
-      const userEmail = await User.findOne({ email });
+      const { name, email, password, zipCode, phoneNumber, address } = req.body;
+      const userEmail = await Shop.findOne({ email });
 
       if (userEmail) {
         const filename = req.file.filename;
@@ -21,32 +22,35 @@ class UserController {
             res.status(500).json({ message: "Error deleting file" });
           }
         });
-        return next(new ErrorHandler("User already exists", 400));
+        return next(new ErrorHandler("Seller already exists", 400));
       }
 
       const filename = req.file.filename;
       const fileUrl = path.join(filename);
 
-      const user = {
+      const seller = {
         name: name,
         email: email,
         password: password,
         avatar: fileUrl,
+        zipCode: zipCode,
+        phoneNumber: phoneNumber,
+        address: address,
       };
 
-      const activationToken = createActivationToken(user);
+      const activationToken = createActivationToken(seller);
 
-      const activationUrl = `http://localhost:3000/activation/${activationToken}`;
+      const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
 
       try {
         await sendMail({
-          email: user.email,
+          email: seller.email,
           subject: "Activate your account",
-          message: `Hello ${user.name}, please click on the link to activate your account: ${activationUrl}`,
+          message: `Hello ${seller.name}, please click on the link to activate your account: ${activationUrl}`,
         });
         res.status(201).json({
           success: true,
-          message: `please check your email:- ${user.email} to activate your account!`,
+          message: `please check your email:- ${seller.email} to activate your account!`,
         });
       } catch (error) {
         return next(new ErrorHandler(error.message, 500));
@@ -55,99 +59,92 @@ class UserController {
       return next(new ErrorHandler(error.message, 400));
     }
   }
-
-  // active user
+  // activation seller
   async activation(req, res, next) {
     try {
       const { token } = req.body;
-      const newUser = jwt.verify(token, process.env.ACTIVATION_SECRET);
-      if (!newUser) {
+      const newSeller = jwt.verify(token, process.env.ACTIVATION_SECRET);
+      if (!newSeller) {
         return next(new ErrorHandler("Invalid token", 400));
       }
-      const { name, email, password, avatar } = newUser;
-      let user = await User.findOne({ email });
-      if (user) {
+      const { name, email, password, avatar, zipCode, phoneNumber, address } =
+        newSeller;
+      let seller = await Shop.findOne({ email });
+      if (seller) {
         return next(new ErrorHandler("User already exitsts", 400));
       }
-      user = await User.create({
+      seller = await Shop.create({
         name,
         email,
         password,
-        avatar: {
-          url: avatar,
-        },
+        avatar: avatar,
+        zipCode,
+        phoneNumber,
+        address,
       });
-      sendToken(user, 201, res);
+      sendShopToken(seller, 201, res);
     } catch (error) {
       return next(new ErrorHandler(error.message, 400));
     }
   }
 
-  // login account
-
+  // login
   async login(req, res, next) {
     try {
-      const { userName, password } = req.body;
-      if (!userName || !password) {
+      const { email, password } = req.body;
+      if (!email || !password) {
         return next(new ErrorHandler("Please provide the all fields!", 400));
       }
-      let user = await User.findOne({ name: userName }).select("+password");
-      if (!user) {
-        user = await User.findOne({ email: userName }).select("+password");
-      }
-      if (!user) {
+      let  seller = await Shop.findOne({ email }).select("+password");
+      if (!seller) {
         return next(new ErrorHandler("tài khoản không tồn tại", 400));
       }
-      const isPassword = await user.comparePassword(password);
+      const isPassword = await seller.comparePassword(password);
       if (!isPassword) {
         return next(new ErrorHandler("mật khẩu không đúng", 400));
       }
-      sendToken(user, 201, res);
+      sendShopToken(seller, 201, res);
     } catch (error) {
       return next(new ErrorHandler(error.message, 400));
     }
   }
 
-  // load user
   async getUser(req, res, next) {
     try {
-      const user = await User.findById(req.user.id);
-
-      if (!user) {
-        return next(new ErrorHandler("User doesn't exists", 400));
+      const seller = await Shop.findById(req.seller._id);
+      if (!seller) {
+        return next(new ErrorHandler("Seller doesn't exists", 400));
       }
-
       res.status(200).json({
         success: true,
-        user,
+        seller,
       });
     } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+      return next(new ErrorHandler(error.message, 400));
     }
   }
-
   // logout
   async logout(req, res, next) {
     try {
-      res.cookie("token","null",{
+      res.cookie("seller_token", "null", {
         expires: new Date(Date.now()),
         httpOnly: true,
-      })
+      });
 
       res.status(201).json({
-        success:true,
-        message:"Bạn đã log out thành công"
-      })
+        success: true,
+        message: "Bạn đã log out thành công",
+      });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
   }
 }
-// create activation token
-const createActivationToken = (user) => {
-  return jwt.sign(user, process.env.ACTIVATION_SECRET, {
+
+const createActivationToken = (seller) => {
+  return jwt.sign(seller, process.env.ACTIVATION_SECRET, {
     expiresIn: "5m",
   });
 };
 
-module.exports = new UserController();
+module.exports = new ShopController();
