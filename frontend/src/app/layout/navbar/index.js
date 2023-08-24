@@ -8,7 +8,6 @@ const Navbar = ({ active }) => {
     <div className={`${styles.noramlFlex}`}>
       {navItems &&
         navItems.map((i, index) => {
-          console.log(i, active)
           return (
             <div className="flex" key={index}>
               <Link

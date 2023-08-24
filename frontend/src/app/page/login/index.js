@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   EyeOutlined,
   EyeInvisibleOutlined,
@@ -9,6 +9,7 @@ import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import { service  } from "../../../util/server";
+import { useSelector } from "react-redux";
 
 
 const cx = classNames.bind(styles);
@@ -18,6 +19,13 @@ export default function Login() {
   const [eye, setEye] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const {isAuthenticated}=useSelector((state)=> state.user);
+  useEffect(() => {
+    if(isAuthenticated=== true){
+      navigate("/");
+    }
+  }, [])
+  
 
 
   const handleSubmit = async (e) => {
@@ -31,7 +39,7 @@ export default function Login() {
       .then((res) => {
         toast.success("Đăng nhập nhành công");
         navigate("/");
-        //window.location.reload();
+        window.location.reload(true);
       })
       .catch((error) => {
         toast.error("Lỗi khi đăng nhập");

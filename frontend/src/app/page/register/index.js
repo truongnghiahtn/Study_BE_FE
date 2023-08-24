@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   EyeOutlined,
   EyeInvisibleOutlined,
@@ -6,20 +6,31 @@ import {
 } from "@ant-design/icons";
 import classNames from "classnames/bind";
 import styles from "./register.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import { service  } from "../../../util/server";
+import { useSelector } from "react-redux";
 
 
 const cx = classNames.bind(styles);
 
 export default function Register() {
+  const navigate = useNavigate();
   const [eye, setEye] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState(null);
+
+  const { isAuthenticated} =useSelector((state)=>state.user);
+
+  useEffect(() => {
+    if(isAuthenticated===true){
+      navigate("/");
+    }
+  }, [])
+  
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
