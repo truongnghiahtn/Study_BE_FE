@@ -11,6 +11,7 @@ router.post("/register",upload.single("file"), shopController.register);
 router.post("/active",catchAsyncErrors(shopController.activation));
 router.post("/login",catchAsyncErrors(shopController.login));
 router.get("/getSeller",isSeller,catchAsyncErrors(shopController.getUser));
+router.get("/get-shop-info/:id",catchAsyncErrors(shopController.getInfoShop))
 router.get("/logout",isSeller,catchAsyncErrors(shopController.logout))
 
 

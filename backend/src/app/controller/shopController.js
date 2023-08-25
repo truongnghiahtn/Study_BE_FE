@@ -139,6 +139,23 @@ class ShopController {
       return next(new ErrorHandler(error.message, 500));
     }
   }
+
+  // get infoshop
+  async getInfoShop(req,res,next){
+    try {
+      const shop = await Shop.findById(req.params.id);
+      if(!shop){
+        return next(new ErrorHandler("Không tồn tại shop này ", 400));
+      }
+      res.status(201).json({
+        success:true,
+        shop,
+      })
+      
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
 }
 
 const createActivationToken = (seller) => {

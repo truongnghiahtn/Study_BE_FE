@@ -1,12 +1,13 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
-  isSeller: false,
+  isLoading: true,
 };
 
 export const sellerReducer = createReducer(initialState, {
   LoadSellerRequest: (state) => {
     state.isLoading = true;
+    console.log("chay");
   },
   LoadSellerSuccess: (state, action) => {
     state.isSeller = true;
