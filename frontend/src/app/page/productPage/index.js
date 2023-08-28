@@ -1,30 +1,37 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import Footer from "../../layout/footer";
 import Header from "../../layout/header";
+import Loader from "../../layout/loader";
 import ProductCard from "../../components/productCard";
-import { productData } from "../../../static/data";
 import styles from "../../../styles/styles";
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
   const categoryData = searchParams.get("category");
+  const {allProducts,isLoading} = useSelector((state) => state.products);
   const [data, setData] = useState([]);
 
   useEffect(() => {
     if (categoryData === null) {
-      const d =
-        productData && productData.sort((a, b) => a.total_sell - b.total_sell);
+      const d = allProducts;
       setData(d);
     } else {
       const d =
-        productData && productData.filter((i) => i.category === categoryData);
+      allProducts && allProducts.filter((i) => i.category === categoryData);
       setData(d);
     }
-  }, []);
+    //    window.scrollTo(0,0);
+  }, [allProducts]);
 
   return (
-    <div>
+  <>
+  {
+    isLoading ? (
+      <Loader />
+    ) : (
+      <div>
       <Header activeHeading={3} />
       <br />
       <br />
@@ -40,6 +47,9 @@ const ProductsPage = () => {
       </div>
       <Footer />
     </div>
+    )
+  }
+  </>
   );
 };
 
