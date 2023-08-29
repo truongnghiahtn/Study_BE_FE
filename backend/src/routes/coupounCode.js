@@ -8,6 +8,7 @@ const coupounCodeController = require('../app/controller/coupounCodeController')
 router.post("/create-coupon-code",isSeller, catchAsyncErrors(coupounCodeController.create));
 router.get("/get-coupon/:id",isSeller, catchAsyncErrors(coupounCodeController.getById));
 router.delete("/delete-coupon/:id",isSeller, catchAsyncErrors(coupounCodeController.delete));
+router.get("/get-coupon-value/:name", catchAsyncErrors(coupounCodeController.getByname));
 
 
 

@@ -11,7 +11,13 @@ router.post("/register",upload.single("file"), userController.register);
 router.post("/active",catchAsyncErrors(userController.activation));
 router.post("/login",catchAsyncErrors(userController.login));
 router.get("/getUser",isAuthenticated,catchAsyncErrors(userController.getUser));
-router.get("/logout",isAuthenticated,catchAsyncErrors(userController.logout))
+router.get("/logout",isAuthenticated,catchAsyncErrors(userController.logout));
+router.put("/update-user-info",isAuthenticated,catchAsyncErrors(userController.updateUser));
+router.put("/update-avatar",isAuthenticated,upload.single("image"),catchAsyncErrors(userController.updateAvatarUser));
+router.put("/update-user-addresses",isAuthenticated,catchAsyncErrors(userController.updateAddressUser));
+router.delete("/delete-user-address/:id",isAuthenticated,catchAsyncErrors(userController.deleteAddress));
+router.put("/update-user-password",isAuthenticated,catchAsyncErrors(userController.updatePassword));
+router.get("/user-info/:id",isAuthenticated,catchAsyncErrors(userController.getUserById));
 
 
 module.exports= router;

@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs"); //  hash code password
 const jwt = require("jsonwebtoken"); // token of user
 
-
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -23,7 +22,7 @@ const userSchema = new Schema({
   phoneNumber: {
     type: Number,
   },
-  address: [
+  addresses: [
     {
       country: {
         type: String,
@@ -31,7 +30,16 @@ const userSchema = new Schema({
       city: {
         type: String,
       },
-      address: {
+      address1: {
+        type: String,
+      },
+      address2: {
+        type: String,
+      },
+      zipCode: {
+        type: Number,
+      },
+      addressType: {
         type: String,
       },
     },

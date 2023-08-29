@@ -129,15 +129,172 @@ class UserController {
   // logout
   async logout(req, res, next) {
     try {
-      res.cookie("token","null",{
+      res.cookie("token", "null", {
         expires: new Date(Date.now()),
         httpOnly: true,
-      })
+      });
 
       res.status(201).json({
-        success:true,
-        message:"Bạn đã log out thành công"
-      })
+        success: true,
+        message: "Bạn đã log out thành công",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+
+  async updateUser(req, res, next) {
+    try {
+      const { email, password, phoneNumber, name } = req.body;
+      const oldEmail = req.user.email;
+
+      const user = await User.findOne({ email: oldEmail }).select("+password");
+
+      if (!user) {
+        return next(new ErrorHandler("User not found", 400));
+      }
+
+      const isPasswordValid = await user.comparePassword(password);
+
+      if (!isPasswordValid) {
+        return next(
+          new ErrorHandler("Please provide the correct information", 400)
+        );
+      }
+
+      user.name = name;
+      //user.email = email; // không được phép đổi email.
+      user.phoneNumber = phoneNumber;
+
+      await user.save();
+
+      res.status(201).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+
+  async updateAvatarUser(req, res, next) {
+    try {
+      const existsUser = await User.findById(req.user.id);
+
+      const existAvatarPath = `uploads/${existsUser.avatar.url}`;
+
+      fs.unlinkSync(existAvatarPath);
+
+      const fileUrl = path.join(req.file.filename);
+
+      const user = await User.findByIdAndUpdate(req.user.id, {
+        avatar: {
+          url: fileUrl,
+        },
+      });
+
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+
+  async updateAddressUser(req, res, next) {
+    try {
+      const user = await User.findById(req.user.id);
+
+      const sameTypeAddress = user.addresses.find(
+        (address) => address.addressType === req.body.addressType
+      );
+      if (sameTypeAddress) {
+        return next(
+          new ErrorHandler(`${req.body.addressType} address already exists`)
+        );
+      }
+
+      const existsAddress = user.addresses.find(
+        (address) => address._id === req.body._id // nếu truyền id là update chính cái adress  đó
+      );
+
+      if (existsAddress) {
+        Object.assign(existsAddress, req.body);
+      } else {
+        // add the new address to the array
+        user.addresses.push(req.body);
+      }
+
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+
+  async deleteAddress(req, res, next) {
+    try {
+      const userId = req.user._id;
+      const addressId = req.params.id;
+
+      await User.updateOne(
+        {
+          _id: userId,
+        },
+        { $pull: { addresses: { _id: addressId } } }
+      );
+
+      const user = await User.findById(userId);
+
+      res.status(200).json({ success: true, user });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+
+  async updatePassword(req, res, next) {
+    try {
+      const user = await User.findById(req.user.id).select("+password");
+
+      const isPasswordMatched = await user.comparePassword(
+        req.body.oldPassword
+      );
+
+      if (!isPasswordMatched) {
+        return next(new ErrorHandler("Old password is incorrect!", 400));
+      }
+
+      if (req.body.newPassword !== req.body.confirmPassword) {
+        return next(
+          new ErrorHandler("Password doesn't matched with each other!", 400)
+        );
+      }
+      user.password = req.body.newPassword;
+
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Password updated successfully!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+
+  async getUserById(req,res,next){
+    try {
+      const user = await User.findById(req.params.id);
+
+      res.status(201).json({
+        success: true,
+        user,
+      });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }

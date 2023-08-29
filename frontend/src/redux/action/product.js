@@ -33,7 +33,6 @@ export const getAllProductsShop = (id) => async (dispatch) => {
     dispatch({
       type: "getAllProductsShopRequest",
     });
-    console.log(id);
 
     const { data } = await axios.get(
       `${service}product/get-all-products-shop/${id}`
