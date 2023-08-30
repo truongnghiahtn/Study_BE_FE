@@ -16,6 +16,7 @@ import ShopCreatePage from "./ShopCreatePage";
 import ActivationSeller from "./activeSeller";
 import OrderDetailsPage from "./OrderDetailsPage";
 import TrackOrderPage from "./TrackOrderPage";
+import UserInbox from "./UserInbox"
 
-export {Register,Home,Activation,Login,BestSellingPage,EventsPage,FAQPage,ProductsPage,
+export {Register,Home,Activation,Login,BestSellingPage,EventsPage,FAQPage,ProductsPage,UserInbox,
 ProductDetailsPage,OrderSuccessPage,CheckoutPage,ProfilePage,PaymentPage,ShopCreatePage,ShopLoginPage,ActivationSeller,OrderDetailsPage,TrackOrderPage};

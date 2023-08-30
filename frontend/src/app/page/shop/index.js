@@ -11,5 +11,6 @@ import ShopOrderDetails from "./ShopOrderDetails";
 import ShopAllRefunds from "./ShopAllRefunds";
 import ShopSettingsPage from "./ShopSettingsPage";
 import ShopWithDrawMoneyPage from "./ShopWithDrawMoneyPage";
+import ShopInboxPage from "./ShopInboxPage"
 export {ShopHomePage,ShopDashboardPage,ShopCreateProduct,ShopAllProducts,ShopCreateEvents,ShopAllEvents,
-    ShopAllCoupouns,ShopPreviewPage,ShopAllOrders,ShopOrderDetails,ShopAllRefunds,ShopSettingsPage,ShopWithDrawMoneyPage}
+    ShopAllCoupouns,ShopPreviewPage,ShopAllOrders,ShopOrderDetails,ShopAllRefunds,ShopSettingsPage,ShopWithDrawMoneyPage,ShopInboxPage}

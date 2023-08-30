@@ -6,6 +6,8 @@ const eventRouter = require("./event");
 const coupounCodeRouter = require("./coupounCode");
 const paymentRouter = require("./payment");
 const orderRouter = require ("./order");
+const messageRouter = require ("./message");
+const conversationRouter = require ("./conversation");
 
 
 function route(app) {
@@ -17,6 +19,8 @@ function route(app) {
   app.use("/api/coupon",coupounCodeRouter);
   app.use("/api/payment",paymentRouter);
   app.use ("/api/order",orderRouter);
+  app.use("/api/message",messageRouter);
+  app.use ("/api/conversation",conversationRouter);
 
 }
 

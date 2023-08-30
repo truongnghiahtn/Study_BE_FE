@@ -17,7 +17,7 @@ router.put("/update-avatar",isAuthenticated,upload.single("image"),catchAsyncErr
 router.put("/update-user-addresses",isAuthenticated,catchAsyncErrors(userController.updateAddressUser));
 router.delete("/delete-user-address/:id",isAuthenticated,catchAsyncErrors(userController.deleteAddress));
 router.put("/update-user-password",isAuthenticated,catchAsyncErrors(userController.updatePassword));
-router.get("/user-info/:id",isAuthenticated,catchAsyncErrors(userController.getUserById));
+router.get("/user-info/:id",catchAsyncErrors(userController.getUserById));
 
 
 module.exports= router;
