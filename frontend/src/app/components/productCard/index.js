@@ -17,7 +17,7 @@ import {
 import { useEffect } from "react";
 import { addTocart } from "../../../redux/action/cart";
 import { toast } from "react-toastify";
-// import Ratings from "../../Products/Ratings";
+import Ratings from "../products/Ratings";
 
 const ProductCard = ({ data,isEvent }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -79,7 +79,7 @@ const ProductCard = ({ data,isEvent }) => {
           </h4>
 
           <div className="flex">
-          {/* <Ratings rating={data?.ratings} /> */}
+          <Ratings rating={data?.ratings} />
           </div>
 
           <div className="py-2 flex items-center justify-between">

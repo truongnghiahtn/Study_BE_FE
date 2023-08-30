@@ -95,7 +95,7 @@ class ShopController {
       if (!email || !password) {
         return next(new ErrorHandler("Please provide the all fields!", 400));
       }
-      let  seller = await Shop.findOne({ email }).select("+password");
+      let seller = await Shop.findOne({ email }).select("+password");
       if (!seller) {
         return next(new ErrorHandler("tài khoản không tồn tại", 400));
       }
@@ -141,17 +141,66 @@ class ShopController {
   }
 
   // get infoshop
-  async getInfoShop(req,res,next){
+  async getInfoShop(req, res, next) {
     try {
       const shop = await Shop.findById(req.params.id);
-      if(!shop){
+      if (!shop) {
         return next(new ErrorHandler("Không tồn tại shop này ", 400));
       }
       res.status(201).json({
-        success:true,
+        success: true,
         shop,
-      })
-      
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+
+  async updateAvatar(req, res, next) {
+    try {
+      const existsUser = await Shop.findById(req.seller._id);
+
+      const existAvatarPath = `uploads/${existsUser.avatar}`;
+
+      fs.unlinkSync(existAvatarPath);
+
+      const fileUrl = path.join(req.file.filename);
+
+      const seller = await Shop.findByIdAndUpdate(req.seller._id, {
+        avatar: fileUrl,
+      });
+
+      res.status(200).json({
+        success: true,
+        seller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+
+  async updateInFo(req, res, next) {
+    try {
+      const { name, description, address, phoneNumber, zipCode } = req.body;
+
+      const shop = await Shop.findOne(req.seller._id);
+
+      if (!shop) {
+        return next(new ErrorHandler("User not found", 400));
+      }
+
+      shop.name = name;
+      shop.description = description;
+      shop.address = address;
+      shop.phoneNumber = phoneNumber;
+      shop.zipCode = zipCode;
+
+      await shop.save();
+
+      res.status(201).json({
+        success: true,
+        shop,
+      });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }

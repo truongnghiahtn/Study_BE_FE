@@ -6,5 +6,10 @@ import ShopCreateEvents from "./ShopCreateEvents";
 import ShopAllEvents from "./ShopAllEvents";
 import ShopAllCoupouns from "./ShopAllCoupouns";
 import ShopPreviewPage from "./ShopPreviewPage";
-
-export {ShopHomePage,ShopDashboardPage,ShopCreateProduct,ShopAllProducts,ShopCreateEvents,ShopAllEvents,ShopAllCoupouns,ShopPreviewPage}
+import ShopAllOrders from "./ShopAllOrders";
+import ShopOrderDetails from "./ShopOrderDetails";
+import ShopAllRefunds from "./ShopAllRefunds";
+import ShopSettingsPage from "./ShopSettingsPage";
+import ShopWithDrawMoneyPage from "./ShopWithDrawMoneyPage";
+export {ShopHomePage,ShopDashboardPage,ShopCreateProduct,ShopAllProducts,ShopCreateEvents,ShopAllEvents,
+    ShopAllCoupouns,ShopPreviewPage,ShopAllOrders,ShopOrderDetails,ShopAllRefunds,ShopSettingsPage,ShopWithDrawMoneyPage}

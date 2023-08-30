@@ -16,6 +16,8 @@ import {
   ShopLoginPage,
   ShopCreatePage,
   ActivationSeller,
+  OrderDetailsPage,
+  TrackOrderPage,
 } from "./app/page";
 import {
   ShopHomePage,
@@ -26,6 +28,11 @@ import {
   ShopAllEvents,
   ShopAllCoupouns,
   ShopPreviewPage,
+  ShopAllOrders,
+  ShopOrderDetails,
+  ShopAllRefunds,
+  ShopSettingsPage,
+  ShopWithDrawMoneyPage,
 } from "./app/page/shop";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -98,6 +105,22 @@ function App() {
               }
             />
             <Route
+              path="/user/order/:id"
+              element={
+                <ProtectedRoute>
+                  <OrderDetailsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user/track/order/:id"
+              element={
+                <ProtectedRoute>
+                  <TrackOrderPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/checkout"
               element={
                 <ProtectedRoute>
@@ -120,6 +143,14 @@ function App() {
               }
             />
             <Route
+              path="/settings"
+              element={
+                <SellerProtectedRoute>
+                  <ShopSettingsPage />
+                </SellerProtectedRoute>
+              }
+            />
+            <Route
               path="/dashboard"
               element={
                 <SellerProtectedRoute>
@@ -132,6 +163,30 @@ function App() {
               element={
                 <SellerProtectedRoute>
                   <ShopCreateProduct />
+                </SellerProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard-orders"
+              element={
+                <SellerProtectedRoute>
+                  <ShopAllOrders />
+                </SellerProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard-refunds"
+              element={
+                <SellerProtectedRoute>
+                  <ShopAllRefunds />
+                </SellerProtectedRoute>
+              }
+            />
+            <Route
+              path="/order/:id"
+              element={
+                <SellerProtectedRoute>
+                  <ShopOrderDetails />
                 </SellerProtectedRoute>
               }
             />
@@ -164,6 +219,14 @@ function App() {
               element={
                 <SellerProtectedRoute>
                   <ShopAllCoupouns />
+                </SellerProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard-withdraw-money"
+              element={
+                <SellerProtectedRoute>
+                  <ShopWithDrawMoneyPage />
                 </SellerProtectedRoute>
               }
             />

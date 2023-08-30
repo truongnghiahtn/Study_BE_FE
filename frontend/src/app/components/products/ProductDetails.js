@@ -16,7 +16,7 @@ import {
 } from "../../../redux/action/wishlist";
 import { addTocart } from "../../../redux/action/cart";
 import { toast } from "react-toastify";
-// import Ratings from "./Ratings";
+import Ratings from "./Ratings";
 import axios from "axios";
 
 const ProductDetails = ({ data }) => {
@@ -24,9 +24,6 @@ const ProductDetails = ({ data }) => {
   const { cart } = useSelector((state) => state.cart);
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.products);
-  if(products){
-    console.log(products);
-  }
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
@@ -76,44 +73,43 @@ const ProductDetails = ({ data }) => {
     }
   };
 
-  const totalReviewsLength = 1;
+  // const totalReviewsLength = 1;
 
-  // const totalReviewsLength =
-  //   products &&
-  //   products.reduce((acc, product) => acc + product.reviews.length, 0);
+  const totalReviewsLength =
+    products &&
+    products.reduce((acc, product) => acc + product.reviews.length, 0);
 
-  // const totalRatings =
-  //   products &&
-  //   products.reduce(
-  //     (acc, product) =>
-  //       acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
-  //     0
-  //   );
+  const totalRatings =
+    products &&
+    products.reduce(
+      (acc, product) =>
+        acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
+      0
+    );
 
-  // const averageRating = totalRatings / totalReviewsLength || 0;
-  const averageRating=1;
+  const averageRating = totalRatings / totalReviewsLength || 0;
 
-  // const handleMessageSubmit = async () => {
-  //   if (isAuthenticated) {
-  //     const groupTitle = data._id + user._id;
-  //     const userId = user._id;
-  //     const sellerId = data.shop._id;
-  //     await axios
-  //       .post(`${service}/conversation/create-new-conversation`, {
-  //         groupTitle,
-  //         userId,
-  //         sellerId,
-  //       })
-  //       .then((res) => {
-  //         navigate(`/inbox?${res.data.conversation._id}`);
-  //       })
-  //       .catch((error) => {
-  //         toast.error(error.response.data.message);
-  //       });
-  //   } else {
-  //     toast.error("Please login to create a conversation");
-  //   }
-  // };
+  const handleMessageSubmit = async () => {
+    if (isAuthenticated) {
+      const groupTitle = data._id + user._id;
+      const userId = user._id;
+      const sellerId = data.shop._id;
+      await axios
+        .post(`${service}/conversation/create-new-conversation`, {
+          groupTitle,
+          userId,
+          sellerId,
+        })
+        .then((res) => {
+          navigate(`/inbox?${res.data.conversation._id}`);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    } else {
+      toast.error("Please login to create a conversation");
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -228,7 +224,7 @@ const ProductDetails = ({ data }) => {
                   </div>
                   <div
                     className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
-                    // onClick={handleMessageSubmit}
+                    onClick={handleMessageSubmit}
                   >
                     <span className="text-white flex items-center">
                       Send Message <AiOutlineMessage className="ml-1" />
@@ -317,14 +313,14 @@ const ProductDetailsInfo = ({
             data.reviews.map((item, index) => (
               <div className="w-full flex my-2">
                 <img
-                  src={`${backend_url}/${item.user.avatar}`}
+                  src={`${backend_url}/${item.user.avatar.url}`}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full"
                 />
                 <div className="pl-2 ">
                   <div className="w-full flex items-center">
                     <h1 className="font-[500] mr-3">{item.user.name}</h1>
-                    {/* <Ratings rating={data?.ratings} /> */}
+                    <Ratings rating={data?.ratings} />
                   </div>
                   <p>{item.comment}</p>
                 </div>

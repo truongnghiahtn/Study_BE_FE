@@ -14,6 +14,8 @@ import PaymentPage from "./PaymentPage";
 import ShopLoginPage from "./ShopLoginPage";
 import ShopCreatePage from "./ShopCreatePage";
 import ActivationSeller from "./activeSeller";
+import OrderDetailsPage from "./OrderDetailsPage";
+import TrackOrderPage from "./TrackOrderPage";
 
 export {Register,Home,Activation,Login,BestSellingPage,EventsPage,FAQPage,ProductsPage,
-ProductDetailsPage,OrderSuccessPage,CheckoutPage,ProfilePage,PaymentPage,ShopCreatePage,ShopLoginPage,ActivationSeller};
+ProductDetailsPage,OrderSuccessPage,CheckoutPage,ProfilePage,PaymentPage,ShopCreatePage,ShopLoginPage,ActivationSeller,OrderDetailsPage,TrackOrderPage};
